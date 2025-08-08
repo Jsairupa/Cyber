@@ -7,7 +7,7 @@ import BlogPostStatic from "@/components/server/blog-post-static"
 import { notFound } from "next/navigation"
 
 // Generate static params for all categories
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<{ category: string }[]> {
   const categories = getBlogCategories()
   return categories.map((category) => ({
     category: category.toLowerCase(),
