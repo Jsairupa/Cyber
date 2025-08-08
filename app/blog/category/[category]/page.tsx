@@ -7,7 +7,7 @@ import BlogPostStatic from "@/components/server/blog-post-static"
 import { notFound } from "next/navigation"
 
 // Generate static params for all categories
-export async function generateStaticParams(): Promise<{ category: string }[]> {
+export async function generateStaticParams() {
   const categories = getBlogCategories()
   return categories.map((category) => ({
     category: category.toLowerCase(),
@@ -15,11 +15,7 @@ export async function generateStaticParams(): Promise<{ category: string }[]> {
 }
 
 // Generate dynamic metadata based on the category
-export async function generateMetadata({
-  params,
-}: {
-  params: { category: string }
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
   const categoryName = params.category.charAt(0).toUpperCase() + params.category.slice(1)
 
   return {
@@ -31,15 +27,9 @@ export async function generateMetadata({
 // Use ISR with revalidation every 24 hours
 export const revalidate = 86400
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: { category: string }
-}) {
+export default async function CategoryPage({ params }: { params: { category: string } }) {
   const categories = getBlogCategories()
-  const matchedCategory = categories.find(
-    (cat) => cat.toLowerCase() === params.category.toLowerCase()
-  )
+  const matchedCategory = categories.find((cat) => cat.toLowerCase() === params.category.toLowerCase())
 
   if (!matchedCategory) {
     notFound()
