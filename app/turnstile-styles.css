@@ -1,0 +1,70 @@
+/* Turnstile container styling */
+.turnstile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  position: relative;
+  min-height: 78px;
+  width: 100%;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 400px) {
+  .turnstile-container {
+    transform: scale(0.85);
+    transform-origin: center;
+  }
+}
+
+/* Dark mode styling for Turnstile iframe */
+iframe[src*="challenges.cloudflare.com"] {
+  border-radius: 4px;
+}
+
+/* Accessibility focus styles */
+.turnstile-container:focus-within {
+  outline: 2px solid var(--primary);
+  border-radius: 4px;
+}
+
+/* Ensure the Turnstile iframe is visible */
+.cf-turnstile {
+  min-height: 65px;
+  min-width: 300px;
+  display: inline-block;
+  margin: 0 auto;
+  background-color: rgba(30, 41, 59, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Ensure the widget is properly centered */
+.cf-turnstile iframe {
+  margin: 0 auto;
+  display: block;
+  border: none;
+  overflow: hidden;
+}
+
+/* Fallback styling */
+.turnstile-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 78px;
+  width: 100%;
+  padding: 1rem;
+}
+
+/* Error state styling */
+.turnstile-error {
+  width: 300px;
+  margin: 0 auto;
+}
+
+/* Prevent body scrolling when modal is open */
+body.modal-open {
+  overflow: hidden;
+}

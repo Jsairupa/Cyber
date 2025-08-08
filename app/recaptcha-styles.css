@@ -1,0 +1,30 @@
+/* reCAPTCHA container styling */
+.recaptcha-container {
+  display: inline-flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* Ensure the reCAPTCHA iframe is centered */
+.g-recaptcha {
+  display: inline-block;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 400px) {
+  .recaptcha-container {
+    transform: scale(0.85);
+    transform-origin: left center;
+  }
+}
+
+/* Dark mode styling for reCAPTCHA iframe */
+.g-recaptcha iframe {
+  border-radius: 4px;
+}
+
+/* Accessibility focus styles */
+.g-recaptcha:focus-within {
+  outline: 2px solid var(--primary);
+  border-radius: 4px;
+}
