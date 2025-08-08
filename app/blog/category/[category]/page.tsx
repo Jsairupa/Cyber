@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import type { PageProps } from "next"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -16,7 +15,11 @@ export async function generateStaticParams(): Promise<{ category: string }[]> {
 }
 
 // Generate dynamic metadata based on the category
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { category: string }
+}): Promise<Metadata> {
   const categoryName = params.category.charAt(0).toUpperCase() + params.category.slice(1)
 
   return {
@@ -28,9 +31,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 // Use ISR with revalidation every 24 hours
 export const revalidate = 86400
 
-export default async function CategoryPage({ params }: PageProps["params"]) {
+export default async function CategoryPage({
+  params,
+}: {
+  params: { category: string }
+}) {
   const categories = getBlogCategories()
-  const matchedCategory = categories.find((cat) => cat.toLowerCase() === params.category.toLowerCase())
+  const matchedCategory = categories.find(
+    (cat) => cat.toLowerCase() === params.category.toLowerCase()
+  )
 
   if (!matchedCategory) {
     notFound()
