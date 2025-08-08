@@ -6,15 +6,6 @@ import { getBlogPostsByCategory, getBlogCategories } from "@/lib/blog-data"
 import BlogPostStatic from "@/components/server/blog-post-static"
 import { notFound } from "next/navigation"
 
-// ✅ ADD THIS TYPE
-type PageProps = {
-  params: {
-    category: string
-  }
-}
-
-// ✅ Update function signatures to use PageProps
-
 // Generate static params for all categories
 export async function generateStaticParams() {
   const categories = getBlogCategories()
@@ -24,7 +15,7 @@ export async function generateStaticParams() {
 }
 
 // Generate dynamic metadata based on the category
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
   const categoryName = params.category.charAt(0).toUpperCase() + params.category.slice(1)
 
   return {
@@ -36,8 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 // Use ISR with revalidation every 24 hours
 export const revalidate = 86400
 
-// ✅ Update this function to use PageProps
-export default function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage({ params }: { params: { category: string } }) {
   const categories = getBlogCategories()
   const matchedCategory = categories.find((cat) => cat.toLowerCase() === params.category.toLowerCase())
 
@@ -73,6 +63,7 @@ export default function CategoryPage({ params }: PageProps) {
             </p>
           </div>
 
+          {/* Categories */}
           <div className="flex flex-wrap gap-2 justify-center mb-8">
             <Link
               href="/blog"
@@ -96,4 +87,14 @@ export default function CategoryPage({ params }: PageProps) {
             ))}
           </div>
 
-          <div className
+          {/* Posts Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map((post, index) => (
+              <BlogPostStatic key={post.id} post={post} priority={index < 3} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
