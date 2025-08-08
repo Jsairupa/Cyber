@@ -6,6 +6,15 @@ import { getBlogPostsByCategory, getBlogCategories } from "@/lib/blog-data"
 import BlogPostStatic from "@/components/server/blog-post-static"
 import { notFound } from "next/navigation"
 
+// ✅ ADD THIS TYPE
+type PageProps = {
+  params: {
+    category: string
+  }
+}
+
+// ✅ Update function signatures to use PageProps
+
 // Generate static params for all categories
 export async function generateStaticParams() {
   const categories = getBlogCategories()
@@ -15,8 +24,7 @@ export async function generateStaticParams() {
 }
 
 // Generate dynamic metadata based on the category
-export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
-  // Capitalize the first letter of the category
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const categoryName = params.category.charAt(0).toUpperCase() + params.category.slice(1)
 
   return {
@@ -28,20 +36,17 @@ export async function generateMetadata({ params }: { params: { category: string 
 // Use ISR with revalidation every 24 hours
 export const revalidate = 86400
 
-export default function CategoryPage({ params }: { params: { category: string } }) {
-  // Find the matching category (case-insensitive)
+// ✅ Update this function to use PageProps
+export default function CategoryPage({ params }: PageProps) {
   const categories = getBlogCategories()
   const matchedCategory = categories.find((cat) => cat.toLowerCase() === params.category.toLowerCase())
 
-  // If no matching category is found, return 404
   if (!matchedCategory) {
     notFound()
   }
 
-  // Get posts for this category
   const posts = getBlogPostsByCategory(matchedCategory)
 
-  // If no posts are found, return 404
   if (posts.length === 0) {
     notFound()
   }
@@ -68,7 +73,6 @@ export default function CategoryPage({ params }: { params: { category: string } 
             </p>
           </div>
 
-          {/* Categories */}
           <div className="flex flex-wrap gap-2 justify-center mb-8">
             <Link
               href="/blog"
@@ -92,18 +96,4 @@ export default function CategoryPage({ params }: { params: { category: string } 
             ))}
           </div>
 
-          {/* Posts Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {posts.map((post, index) => (
-              <BlogPostStatic
-                key={post.id}
-                post={post}
-                priority={index < 3} // Only prioritize the first 3 posts
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+          <div className
